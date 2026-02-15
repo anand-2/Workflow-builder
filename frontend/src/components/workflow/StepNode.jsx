@@ -1,24 +1,16 @@
 import React from 'react';
 import { Paper, Text } from '@mantine/core';
 import { Handle, Position } from '@xyflow/react';
-import { vars } from '../../theme';
+import './StepNode.css';
 
 export function StepNode({ data, selected }) {
-  const bg = selected ? vars.nodeActiveBg() : vars.nodeDefaultBg();
-  const borderColor = selected ? vars.nodeActiveBorder() : vars.nodeDefaultBorder();
-
   return (
     <Paper
       shadow={selected ? 'md' : 'sm'}
       p="md"
       radius="md"
       withBorder
-      style={{
-        minWidth: 160,
-        borderWidth: selected ? 2 : 1,
-        borderColor,
-        backgroundColor: bg,
-      }}
+      className={`stepNode_root${selected ? ' stepNode_root--selected' : ''}`}
     >
       <Handle type="target" position={Position.Left} id="in" />
       <Text size="sm" fw={600} c="var(--app-text-primary)">{data?.label ?? 'Step'}</Text>

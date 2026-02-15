@@ -275,6 +275,33 @@ async def get_all_runs():
         cursor.close()
         conn.close()
 
+@app.get("/api/workflows/{workflow_id}/runs")
+async def get_workflow_runs(workflow_id: int):
+    """Fetch all execution history for a specific workflow"""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute(
+            """
+            SELECT wr.*, w.name as workflow_name 
+            FROM workflow_runs wr
+            JOIN workflows w ON wr.workflow_id = w.id
+            WHERE wr.workflow_id = %s
+            ORDER BY wr.created_at DESC
+            """, 
+            (workflow_id,)
+        )
+        runs = cursor.fetchall()
+        
+        # Note: If no runs exist, it returns an empty list [], which is correct
+        return runs
+    except Exception as e:
+        print(f"Error fetching runs for workflow {workflow_id}: {e}")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+    finally:
+        cursor.close()
+        conn.close()
+        
 @app.get("/")
 async def root():
     return {

@@ -15,6 +15,7 @@ import {
 } from '@mantine/core';
 import { getWorkflows, deleteWorkflow } from '../api';
 import { IconPlus, IconPlayerPlay, IconTrash } from '@tabler/icons-react';
+import './Workflows.css';
 
 function Workflows() {
   const navigate = useNavigate();
@@ -84,7 +85,7 @@ function Workflows() {
       {workflows.length === 0 ? (
         <Card shadow="sm" padding="xl" radius="md" withBorder>
           <Stack align="center" gap="md">
-            <Text size="4rem" style={{ lineHeight: 1 }}>📋</Text>
+            <Text size="4rem" className="workflows_emptyIcon">📋</Text>
             <Title order={4}>No workflows yet</Title>
             <Text c="dimmed">Create your first workflow to get started.</Text>
             <Button component={Link} to="/create">Create Workflow</Button>
@@ -110,7 +111,7 @@ function Workflows() {
                     size="sm"
                     leftSection={<IconPlayerPlay size={16} />}
                     onClick={() => navigate(`/workflows/${workflow.id}`)}
-                    style={{ flex: 1 }}
+                    className="workflows_runButton"
                   >
                     Run
                   </Button>

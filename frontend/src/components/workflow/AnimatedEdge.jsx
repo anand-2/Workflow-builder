@@ -1,6 +1,6 @@
 import React from 'react';
 import { BaseEdge, getSmoothStepPath } from '@xyflow/react';
-import { vars } from '../../theme';
+import './AnimatedEdge.css';
 
 export function AnimatedEdge({ id, sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition, data }) {
   const [path] = getSmoothStepPath({
@@ -17,16 +17,7 @@ export function AnimatedEdge({ id, sourceX, sourceY, targetX, targetY, sourcePos
   return (
     <>
       <BaseEdge id={id} path={path} />
-      {active && (
-        <path
-          d={path}
-          fill="none"
-          stroke={vars.edgeActive()}
-          strokeWidth={2}
-          strokeDasharray="8 4"
-          style={{ animation: 'flowDash 0.6s linear infinite' }}
-        />
-      )}
+      {active && <path d={path} className="animatedEdge_activePath" />}
     </>
   );
 }

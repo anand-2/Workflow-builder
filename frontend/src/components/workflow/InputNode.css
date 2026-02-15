@@ -1,0 +1,6 @@
+.inputNode_root {
+  min-width: 140px;
+  background-color: var(--app-node-trigger-bg);
+  border-color: var(--app-node-trigger-border);
+  border-width: 1px;
+}

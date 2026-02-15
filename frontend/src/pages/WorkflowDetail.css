@@ -1,0 +1,58 @@
+.workflowDetail_flowWrap {
+  height: 140px;
+  border: 1px solid var(--app-border);
+  border-radius: var(--mantine-radius-md);
+  background-color: var(--app-bg-canvas);
+}
+
+.workflowDetail_reactFlow {
+  width: 100%;
+  height: 100%;
+}
+
+.workflowDetail_stepPaper {
+  border-left-width: 4px;
+}
+
+.workflowDetail_stepPaper--success {
+  border-left-color: var(--app-node-success-border);
+}
+
+.workflowDetail_stepPaper--failed {
+  border-left-color: var(--app-node-error-border);
+}
+
+.workflowDetail_stepPaper--streaming {
+  border-left-color: var(--app-node-active-border);
+}
+
+.workflowDetail_blockText {
+  white-space: pre-wrap;
+  background: var(--app-bg-elevated);
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.workflowDetail_blockOutput {
+  white-space: pre-wrap;
+  background: var(--app-bg-elevated);
+  padding: 8px;
+  border-radius: 4px;
+  min-height: 24px;
+}
+
+.workflowDetail_cursorBlink {
+  animation: blink 1s step-end infinite;
+}
+
+.workflowDetail_resultStepPaper {
+  border-left-width: 4px;
+}
+
+.workflowDetail_resultStepPaper--success {
+  border-left-color: var(--app-node-success-border);
+}
+
+.workflowDetail_resultStepPaper--failed {
+  border-left-color: var(--app-node-error-border);
+}

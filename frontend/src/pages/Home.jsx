@@ -12,7 +12,7 @@ import {
   Box,
 } from '@mantine/core';
 import { IconPlus, IconList, IconChartDots, IconArrowRight } from '@tabler/icons-react';
-import { vars } from '../theme';
+import './Home.css';
 
 const features = [
   {
@@ -72,7 +72,7 @@ function Home() {
         <Title order={4} mb="md">Available Step Types</Title>
         <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="sm">
           {stepTypes.map((step, i) => (
-            <Card key={i} padding="sm" withBorder radius="sm" style={{ borderLeftWidth: 4, borderLeftColor: vars.primary() }}>
+            <Card key={i} padding="sm" withBorder radius="sm" className="home_stepCard">
               <Text size="sm" fw={600}>{step.name}</Text>
               <Text size="xs" c="dimmed">{step.desc}</Text>
             </Card>

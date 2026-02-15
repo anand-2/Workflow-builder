@@ -1,0 +1,290 @@
+
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  * {
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--app-bg-page) !important;
+  }
+  
+  [data-mantine-color-scheme="dark"] body {
+    background-color: var(--app-bg-page) !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* ============================================
+    HEADER / NAVBAR
+    ============================================ */
+  .app_header {
+    background: var(--app-header-bg) !important;
+    border-bottom: none !important;
+    box-shadow: var(--app-header-shadow) !important;
+    backdrop-filter: blur(10px);
+    position: sticky;
+    overflow: hidden;
+  }
+  
+  .app_header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--app-header-shimmer);
+    animation: shimmer 3s infinite;
+  }
+  
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  
+  [data-mantine-color-scheme="dark"] .app_header {
+    background: var(--app-header-bg-dark) !important;
+    box-shadow: var(--app-header-shadow-dark) !important;
+    border-bottom: 1px solid var(--app-border) !important;
+  }
+  
+  /* Title styling */
+  .app_header .mantine-Title-root {
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.8px !important;
+    color: var(--app-header-text) !important;
+    font-size: 1.35rem !important;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    z-index: 1;
+    text-shadow: var(--app-header-text-shadow);
+  }
+  
+  .app_header .mantine-Title-root::before {
+    content: '⚡';
+    font-size: 1.6rem;
+    filter: var(--app-emoji-glow);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  
+  @keyframes pulse {
+    0%, 100% { 
+      transform: scale(1);
+      filter: var(--app-emoji-glow);
+    }
+    50% { 
+      transform: scale(1.15);
+      filter: var(--app-emoji-glow-active);
+    }
+  }
+  
+  [data-mantine-color-scheme="dark"] .app_header .mantine-Title-root {
+    color: var(--app-header-text-dark) !important;
+    text-shadow: var(--app-header-text-shadow-dark);
+  }
+  
+  /* Group styling */
+  .app_header .mantine-Group-root {
+    padding: 0 24px !important;
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Theme toggle button */
+  .app_header .mantine-ActionIcon-root {
+    background: var(--app-header-btn-bg) !important;
+    border: 1px solid var(--app-header-btn-border) !important;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    border-radius: 12px !important;
+    color: var(--app-header-text) !important;
+  }
+  
+  .app_header .mantine-ActionIcon-root:hover {
+    background: var(--app-header-btn-bg-hover) !important;
+    border-color: var(--app-header-btn-border-hover) !important;
+    transform: translateY(-2px) rotate(15deg);
+    box-shadow: var(--app-header-btn-shadow);
+  }
+  
+  [data-mantine-color-scheme="dark"] .app_header .mantine-ActionIcon-root {
+    background: var(--app-header-btn-bg-dark) !important;
+    border: 1px solid var(--app-header-btn-border-dark) !important;
+  }
+  
+  [data-mantine-color-scheme="dark"] .app_header .mantine-ActionIcon-root:hover {
+    background: var(--app-header-btn-bg-hover-dark) !important;
+    border-color: var(--app-header-btn-border-hover-dark) !important;
+  }
+  
+  /* ============================================
+    BURGER MENU BUTTON
+    ============================================ */
+  .app_header .mantine-Burger-root {
+    color: var(--app-header-text) !important;
+    transition: all 0.2s ease !important;
+  }
+  
+  .app_header .mantine-Burger-root:hover {
+    background: var(--app-header-btn-bg-hover) !important;
+    transform: scale(1.05);
+  }
+  
+  .app_header .mantine-Burger-burger {
+    background: var(--app-header-text) !important;
+  }
+  
+  .app_header .mantine-Burger-burger::before,
+  .app_header .mantine-Burger-burger::after {
+    background: var(--app-header-text) !important;
+  }
+  
+  /* Smooth navbar transition */
+  .mantine-AppShell-navbar {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+  
+  /* Adjust main content when navbar is closed */
+  .mantine-AppShell-main {
+    transition: padding-left 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+  
+  /* ============================================
+    SIDEBAR / NAVIGATION
+    ============================================ */
+  .app_navbar {
+    background-color: var(--app-bg-sidebar) !important;
+    border-right: 1px solid var(--app-border) !important;
+    padding: 20px 12px !important;
+  }
+  
+  [data-mantine-color-scheme="dark"] .app_navbar {
+    background-color: var(--app-bg-sidebar) !important;
+    border-right: 1px solid var(--app-border) !important;
+  }
+  
+  /* NavLink styles */
+  .app_navbar .mantine-NavLink-root {
+    border-radius: 10px !important;
+    margin-bottom: 6px !important;
+    padding: 12px 14px !important;
+    font-weight: 500 !important;
+    font-size: 0.9rem !important;
+    color: var(--app-text-secondary) !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .app_navbar .mantine-NavLink-root::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--app-primary);
+    transform: scaleY(0);
+    transition: transform 0.2s ease;
+  }
+  
+  .app_navbar .mantine-NavLink-root:hover {
+    background-color: var(--app-primary-light) !important;
+    color: var(--app-text-primary) !important;
+    transform: translateX(4px);
+  }
+  
+  .app_navbar .mantine-NavLink-root:hover::before {
+    transform: scaleY(1);
+  }
+  
+  /* Active NavLink */
+  .app_navbar .mantine-NavLink-root[data-active="true"] {
+    background: var(--app-nav-active-bg) !important;
+    color: var(--app-nav-active-text) !important;
+    font-weight: 600 !important;
+    box-shadow: var(--app-nav-active-shadow);
+  }
+  
+  .app_navbar .mantine-NavLink-root[data-active="true"]::before {
+    display: none;
+  }
+  
+  .app_navbar .mantine-NavLink-root[data-active="true"] .mantine-NavLink-label {
+    color: var(--app-nav-active-text) !important;
+  }
+  
+  .app_navbar .mantine-NavLink-root[data-active="true"] svg {
+    color: var(--app-nav-active-text) !important;
+  }
+  
+  /* NavLink icon */
+  .app_navbar .mantine-NavLink-section {
+    color: var(--app-text-muted) !important;
+  }
+  
+  .app_navbar .mantine-NavLink-root:hover .mantine-NavLink-section {
+    color: var(--app-primary) !important;
+  }
+  
+  .app_navbar .mantine-NavLink-root[data-active="true"] .mantine-NavLink-section {
+    color: var(--app-nav-active-text) !important;
+  }
+  
+  /* ============================================
+    MAIN CONTENT AREA
+    ============================================ */
+  .app_main {
+    background-color: var(--app-bg-page) !important;
+    padding: 24px 24px 24px 244px;
+  }
+  
+  [data-mantine-color-scheme="dark"] .app_main {
+    background-color: var(--app-bg-page) !important;
+  }
+
+  .mobile_blocker {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: var(--app-bg-page);
+    z-index: 9999;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px;
+  }
+
+.mobile_blocker h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: var(--app-text-primary);
+}
+
+.mobile_blocker p {
+  color: var(--app-text-secondary);
+  max-width: 300px;
+}
+
+/* Trigger blocker for screens smaller than 1024px */
+@media (max-width: 1023px) {
+  .mobile_blocker {
+    display: flex;
+  }
+  /* Hide the main app shell to prevent scrolling issues */
+  .mantine-AppShell-root {
+    display: none;
+  }
+}

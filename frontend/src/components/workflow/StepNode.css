@@ -1,0 +1,12 @@
+.stepNode_root {
+  min-width: 160px;
+  border-width: 1px;
+  border-color: var(--app-node-default-border);
+  background-color: var(--app-node-default-bg);
+}
+
+.stepNode_root--selected {
+  border-width: 2px;
+  border-color: var(--app-node-active-border);
+  background-color: var(--app-node-active-bg);
+}

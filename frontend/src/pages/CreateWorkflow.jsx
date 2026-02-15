@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ReactFlow,
@@ -23,11 +23,12 @@ import {
   Text,
   Paper,
   Group,
-  Alert,
 } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
+import { IconRotate2, IconRotateClockwise } from '@tabler/icons-react';
 import { createWorkflow } from '../api';
 import { STEP_TYPES, MAX_STEPS, INPUT_NODE_ID } from '../constants';
-import { vars } from '../theme';
+import './CreateWorkflow.css';
 import { InputNode } from '../components/workflow/InputNode';
 import { StepNode } from '../components/workflow/StepNode';
 
@@ -48,13 +49,23 @@ const initialEdges = [];
 
 function getOrderedSteps(nodes, edges) {
   const stepIds = [];
+  const visited = new Set();
   let currentId = INPUT_NODE_ID;
+  visited.add(currentId);
+
   while (true) {
     const edge = edges.find((e) => e.source === currentId);
     if (!edge) break;
+
+    if (visited.has(edge.target)) {
+      throw new Error("Cycles (loops) are not allowed in this workflow.");
+    }
+
     stepIds.push(edge.target);
+    visited.add(edge.target);
     currentId = edge.target;
   }
+
   return stepIds
     .map((id) => {
       const node = nodes.find((n) => n.id === id);
@@ -67,24 +78,79 @@ function CreateWorkflowInner() {
   const navigate = useNavigate();
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const [formData, setFormData] = React.useState({ name: '', description: '' });
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState(null);
+  const [formData, setFormData] = useState({ name: '', description: '' });
+  const [loading, setLoading] = useState(false);
+  
+  // --- UNDO / REDO STATE ---
+  const [past, setPast] = useState([]);
+  const [future, setFuture] = useState([]);
+
+  const nameInputRef = useRef(null);
   const reactFlowWrapper = useRef(null);
   const { screenToFlowPosition } = useReactFlow();
 
   const stepNodes = nodes.filter((n) => n.type === 'step');
   const atMaxSteps = stepNodes.length >= MAX_STEPS;
 
-  const onConnect = useCallback(
-    (params) => setEdges((eds) => addEdge(params, eds)),
-    [setEdges]
-  );
+  // Helper to save current state before an action
+  const takeSnapshot = useCallback(() => {
+    setPast((prev) => [...prev, { nodes: [...nodes], edges: [...edges] }].slice(-20));
+    setFuture([]);
+  }, [nodes, edges]);
 
-  const onDragOver = useCallback((ev) => {
-    ev.preventDefault();
-    ev.dataTransfer.dropEffect = 'move';
-  }, []);
+  const undo = useCallback(() => {
+    if (past.length === 0) return;
+    const previous = past[past.length - 1];
+    const newPast = past.slice(0, past.length - 1);
+
+    setFuture((prev) => [{ nodes, edges }, ...prev]);
+    setNodes(previous.nodes);
+    setEdges(previous.edges);
+    setPast(newPast);
+  }, [past, nodes, edges, setNodes, setEdges]);
+
+  const redo = useCallback(() => {
+    if (future.length === 0) return;
+    const next = future[0];
+    const newFuture = future.slice(1);
+
+    setPast((prev) => [...prev, { nodes, edges }]);
+    setNodes(next.nodes);
+    setEdges(next.edges);
+    setFuture(newFuture);
+  }, [future, nodes, edges, setNodes, setEdges]);
+
+  // Keyboard Shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+        e.preventDefault();
+        undo();
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key === 'y') {
+        e.preventDefault();
+        redo();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [undo, redo]);
+
+  // Action Wrappers
+  const onConnect = useCallback((params) => {
+    takeSnapshot();
+    setEdges((eds) => addEdge(params, eds));
+  }, [setEdges, takeSnapshot]);
+
+  const onNodesDelete = useCallback(() => {
+    takeSnapshot();
+  }, [takeSnapshot]);
+
+  const onEdgeDelete = useCallback(() => {
+    takeSnapshot();
+  }, [takeSnapshot]);
+
+  const onNodeDragStart = useCallback(() => takeSnapshot(), [takeSnapshot]);
 
   const onDrop = useCallback(
     (ev) => {
@@ -101,56 +167,80 @@ function CreateWorkflowInner() {
           position,
           data: { type, label },
         };
+        takeSnapshot();
         setNodes((nds) => nds.concat(newNode));
       } catch (_) {}
     },
-    [screenToFlowPosition, atMaxSteps, setNodes]
+    [screenToFlowPosition, atMaxSteps, setNodes, takeSnapshot]
   );
+
+  const onDragOver = useCallback((ev) => {
+    ev.preventDefault();
+    ev.dataTransfer.dropEffect = 'move';
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     if (!formData.name.trim()) {
-      setError('Please enter a workflow name');
+      notifications.show({
+        title: 'Input Required',
+        message: 'Please enter a workflow name.',
+        color: 'red',
+      });
+      nameInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      nameInputRef.current?.focus();
       return;
     }
-    const steps = getOrderedSteps(nodes, edges);
-    if (steps.length === 0) {
-      setError('Add at least one step and connect it from Input');
+
+    let steps;
+    try {
+      steps = getOrderedSteps(nodes, edges);
+      if (steps.length === 0) {
+        throw new Error('Add at least one step and connect it from Input.');
+      }
+    } catch (err) {
+      notifications.show({
+        title: 'Workflow Error',
+        message: err.message,
+        color: 'red',
+      });
       return;
     }
-    if (steps.length > MAX_STEPS) {
-      setError(`Maximum ${MAX_STEPS} steps allowed`);
-      return;
-    }
+
     try {
       setLoading(true);
-      setError(null);
       await createWorkflow({
         name: formData.name,
         description: formData.description,
         steps,
       });
+      notifications.show({
+        title: 'Success!',
+        message: 'Workflow created successfully.',
+        color: 'teal',
+      });
       navigate('/workflows');
     } catch (err) {
-      setError(err.response?.data?.detail || err.message || 'Failed to create workflow');
+      notifications.show({
+        title: 'Creation Failed',
+        message: err.response?.data?.detail || err.message || 'Failed to create workflow',
+        color: 'red',
+      });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Box style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 100px)' }}>
-      <Group align="flex-start" gap="md" wrap="nowrap" style={{ flex: 1, minHeight: 0 }}>
-        <Card withBorder shadow="sm" radius="md" p="md" style={{ width: 320, flexShrink: 0, backgroundColor: vars.bgSidebar() }}>
+    <Box className="createWorkflow_root">
+      <Group align="flex-start" gap="md" wrap="nowrap" className="createWorkflow_layout">
+        <Card withBorder shadow="sm" radius="md" p="md" className="createWorkflow_sidebar">
           <Text fw={600} size="lg" mb="md">Create New Workflow</Text>
-          {error && (
-            <Alert color="red" mb="md" variant="light" onClose={() => setError(null)} withCloseButton>
-              {error}
-            </Alert>
-          )}
           <form onSubmit={handleSubmit}>
             <Stack gap="md">
               <TextInput
+                ref={nameInputRef}
                 label="Workflow Name"
                 placeholder="e.g. Blog Post Processor"
                 value={formData.name}
@@ -175,10 +265,7 @@ function CreateWorkflowInner() {
                       withBorder
                       p="xs"
                       radius="sm"
-                      style={{
-                        cursor: disabled ? 'not-allowed' : 'grab',
-                        opacity: disabled ? 0.6 : 1,
-                      }}
+                      className={disabled ? 'createWorkflow_stepPaper createWorkflow_stepPaper--disabled' : 'createWorkflow_stepPaper'}
                       draggable={!disabled}
                       onDragStart={(e) => {
                         if (disabled) return;
@@ -193,7 +280,7 @@ function CreateWorkflowInner() {
                 })}
               </Stack>
               <Group gap="sm">
-                <Button type="submit" loading={loading} disabled={stepNodes.length === 0}>
+                <Button type="submit" loading={loading}>
                   Create Workflow
                 </Button>
                 <Button variant="default" onClick={() => navigate('/workflows')}>
@@ -204,27 +291,46 @@ function CreateWorkflowInner() {
           </form>
         </Card>
 
-        <Paper withBorder radius="md" style={{ flex: 1, minWidth: 0, minHeight: 480, height: '100%', backgroundColor: vars.bgCanvas() }} ref={reactFlowWrapper}>
+        <Paper withBorder radius="md" className="createWorkflow_canvas" ref={reactFlowWrapper}>
           <ReactFlow
-            style={{ width: '100%', height: '100%', minHeight: 480, backgroundColor: vars.bgCanvas() }}
+            className="createWorkflow_reactFlow"
             nodes={nodes}
             edges={edges}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
+            onNodesDelete={onNodesDelete}
+            onEdgeDelete={onEdgeDelete}
+            onNodeDragStart={onNodeDragStart}
             onDrop={onDrop}
             onDragOver={onDragOver}
             nodeTypes={nodeTypes}
             connectionMode={ConnectionMode.Loose}
-            fitView
-            fitViewOptions={{ padding: 0.2 }}
+            defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
           >
             <Background />
             <Controls />
-            <Panel position="top-left">
-              <Text size="xs" c="dimmed">
-                Drag steps from the left and connect Input → Step 1 → Step 2 … (max {MAX_STEPS} steps)
-              </Text>
+            <Panel position="top-right">
+              <Group gap="xs">
+                <Button 
+                  variant="default" 
+                  size="compact-sm" 
+                  onClick={undo} 
+                  disabled={past.length === 0}
+                  leftSection={<IconRotate2 size={16} />}
+                >
+                  Undo
+                </Button>
+                <Button 
+                  variant="default" 
+                  size="compact-sm" 
+                  onClick={redo} 
+                  disabled={future.length === 0}
+                  leftSection={<IconRotateClockwise size={16} />}
+                >
+                  Redo
+                </Button>
+              </Group>
             </Panel>
           </ReactFlow>
         </Paper>

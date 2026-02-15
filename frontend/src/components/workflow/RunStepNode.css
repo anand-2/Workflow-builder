@@ -1,0 +1,32 @@
+.runStepNode_root {
+  min-width: 160px;
+  border-width: 2px;
+}
+
+.runStepNode_root--pending {
+  border-color: var(--app-node-default-border);
+  background-color: var(--app-node-default-bg);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.runStepNode_root--streaming {
+  border-color: var(--app-node-active-border);
+  background-color: var(--app-node-active-bg);
+}
+
+.runStepNode_root--success {
+  border-color: var(--app-node-success-border);
+  background-color: var(--app-node-success-bg);
+}
+
+.runStepNode_root--failed {
+  border-color: var(--app-node-error-border);
+  background-color: var(--app-node-error-bg);
+}
+
+.runStepNode_placeholderBox {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  background: var(--app-edge-default);
+}

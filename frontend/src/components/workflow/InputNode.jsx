@@ -3,6 +3,7 @@ import { Paper, Text, Group } from '@mantine/core';
 import { IconArrowRight } from '@tabler/icons-react';
 import { Handle, Position } from '@xyflow/react';
 import { vars } from '../../theme';
+import './InputNode.css';
 
 export function InputNode() {
   return (
@@ -11,12 +12,7 @@ export function InputNode() {
       p="md"
       radius="md"
       withBorder
-      style={{
-        minWidth: 140,
-        backgroundColor: vars.nodeTriggerBg(),
-        borderColor: vars.nodeTriggerBorder(),
-        borderWidth: 1,
-      }}
+      className="inputNode_root"
     >
       <Handle type="source" position={Position.Right} id="out" />
       <Group gap="xs" wrap="nowrap">

@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react
 import { AppShell, Group, Title, NavLink, Stack, ActionIcon, Tooltip } from '@mantine/core';
 import { useMantineColorScheme, useComputedColorScheme } from '@mantine/core';
 import { IconHome, IconList, IconPlus, IconChartDots, IconSun, IconMoon } from '@tabler/icons-react';
-import { vars } from './theme';
+import './App.css';
 import Home from './pages/Home';
 import Status from './pages/Status';
 import CreateWorkflow from './pages/CreateWorkflow';
@@ -42,44 +42,47 @@ function ThemeToggle() {
   const computed = useComputedColorScheme('light');
   const isDark = computed === 'dark';
   return (
-    <Tooltip label={isDark ? 'Switch to light' : 'Switch to dark'}>
-      <ActionIcon
-        variant="subtle"
-        color="white"
-        size="lg"
-        onClick={() => setColorScheme(isDark ? 'light' : 'dark')}
-        aria-label="Toggle color scheme"
-      >
-        {isDark ? <IconSun size={20} /> : <IconMoon size={20} />}
-      </ActionIcon>
-    </Tooltip>
+    <ActionIcon
+      variant="subtle"
+      color="white"
+      size="lg"
+      onClick={() => setColorScheme(isDark ? 'light' : 'dark')}
+      aria-label="Toggle color scheme"
+    >
+      {isDark ? <IconSun size={20} /> : <IconMoon size={20} />}
+    </ActionIcon>
   );
 }
 
 function App() {
   return (
     <Router>
+      <div className="mobile_blocker">
+        <h2>⚡</h2>
+        <h2>Not for mobile and tab yet</h2>
+        <p>Our Workflow Builder is optimized for desktop and large laptop screens. Please switch to a larger device.</p>
+      </div>
       <AppShell
         header={{ height: 60 }}
         navbar={{ width: 220, breakpoint: 'sm' }}
         padding="md"
       >
-        <AppShell.Header style={{ background: `linear-gradient(135deg, ${vars.primary()} 0%, ${vars.accent()} 100%)` }}>
+        <AppShell.Header className="app_header">
           <Group h="100%" px="md" justify="space-between">
             <Title order={3} c="white">
-              ⚡ Workflow Builder
+              Workflow Builder
             </Title>
             <ThemeToggle />
           </Group>
         </AppShell.Header>
 
-        <AppShell.Navbar p="md" style={{ backgroundColor: vars.bgSidebar() }}>
+        <AppShell.Navbar p="md" className="app_navbar">
           <AppShell.Section grow>
             <Navigation />
           </AppShell.Section>
         </AppShell.Navbar>
 
-        <AppShell.Main style={{ backgroundColor: vars.bgPage() }}>
+        <AppShell.Main className="app_main">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/status" element={<Status />} />

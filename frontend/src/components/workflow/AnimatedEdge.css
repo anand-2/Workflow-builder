@@ -1,0 +1,7 @@
+.animatedEdge_activePath {
+  fill: none;
+  stroke: var(--app-edge-active);
+  stroke-width: 2;
+  stroke-dasharray: 8 4;
+  animation: flowDash 0.6s linear infinite;
+}

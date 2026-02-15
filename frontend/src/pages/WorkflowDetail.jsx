@@ -27,7 +27,7 @@ import {
   Divider,
 } from '@mantine/core';
 import { IconArrowLeft, IconPlayerPlay } from '@tabler/icons-react';
-import { vars } from '../theme';
+import './WorkflowDetail.css';
 import { getWorkflow, runWorkflowStream, getWorkflowRuns } from '../api';
 import { stepsToFlow } from '../utils/flowHelpers';
 import { InputNode } from '../components/workflow/InputNode';
@@ -210,7 +210,7 @@ function WorkflowDetailInner() {
         </Text>
 
         <Text size="sm" fw={500} mb="xs">Workflow path</Text>
-        <Box style={{ height: 140, border: `1px solid ${vars.border()}`, borderRadius: 'var(--mantine-radius-md)', backgroundColor: vars.bgCanvas() }}>
+        <Box className="workflowDetail_flowWrap">
           <ReactFlow
             nodes={nodes}
             edges={edges}
@@ -223,7 +223,7 @@ function WorkflowDetailInner() {
             nodesDraggable={false}
             nodesConnectable={false}
             elementsSelectable={false}
-            style={{ width: '100%', height: '100%' }}
+            className="workflowDetail_reactFlow"
           >
             <Background size={1} />
             <Controls showInteractive={false} />
@@ -267,7 +267,7 @@ function WorkflowDetailInner() {
           </Group>
           <Stack gap="md">
             {streamingSteps.map((step, index) => (
-              <Paper key={step.stepNumber} withBorder p="md" radius="md" style={{ borderLeftWidth: 4, borderLeftColor: step.status === 'success' ? vars.successBorder() : step.status === 'failed' ? vars.dangerBorder() : vars.primaryBorder() }}>
+              <Paper key={step.stepNumber} withBorder p="md" radius="md" className={`workflowDetail_stepPaper workflowDetail_stepPaper--${step.status === 'success' ? 'success' : step.status === 'failed' ? 'failed' : 'streaming'}`}>
                 <Group justify="space-between" mb="xs">
                   <Text fw={600}>Step {step.stepNumber}: {step.stepName}</Text>
                   <Badge size="sm" color={step.status === 'success' ? 'green' : step.status === 'failed' ? 'red' : 'primary'} variant="light">
@@ -277,13 +277,13 @@ function WorkflowDetailInner() {
                 {index === 0 && step.input != null && (
                   <>
                     <Text size="xs" c="dimmed" tt="uppercase" fw={500}>Input</Text>
-                    <Text size="sm" style={{ whiteSpace: 'pre-wrap', background: vars.bgElevated(), padding: 8, borderRadius: 4 }}>{step.input}</Text>
+                    <Text size="sm" className="workflowDetail_blockText">{step.input}</Text>
                   </>
                 )}
                 <Text size="xs" c="dimmed" tt="uppercase" fw={500} mt="xs">Output</Text>
-                <Text size="sm" style={{ whiteSpace: 'pre-wrap', background: vars.bgElevated(), padding: 8, borderRadius: 4, minHeight: 24 }}>
+                <Text size="sm" className="workflowDetail_blockOutput">
                   {step.output}
-                  {step.status === 'streaming' && <span style={{ animation: 'blink 1s step-end infinite' }}>|</span>}
+                  {step.status === 'streaming' && <span className="workflowDetail_cursorBlink">|</span>}
                 </Text>
                 {step.error && (
                   <Alert color="red" variant="light" mt="xs">{step.error}</Alert>
@@ -299,7 +299,7 @@ function WorkflowDetailInner() {
           <Title order={4} mb="md">Results</Title>
           <Stack gap="md">
             {results.results.map((step, index) => (
-              <Paper key={index} withBorder p="md" radius="md" style={{ borderLeftWidth: 4, borderLeftColor: step.status === 'success' ? vars.successBorder() : vars.dangerBorder() }}>
+              <Paper key={index} withBorder p="md" radius="md" className={`workflowDetail_resultStepPaper workflowDetail_resultStepPaper--${step.status === 'success' ? 'success' : 'failed'}`}>
                 <Group justify="space-between" mb="xs">
                   <Text fw={600}>Step {step.stepNumber}: {step.stepName}</Text>
                   <Badge size="sm" color={step.status === 'success' ? 'green' : 'red'} variant="light">{step.status}</Badge>
@@ -309,11 +309,11 @@ function WorkflowDetailInner() {
                     {index === 0 && (
                       <>
                         <Text size="xs" c="dimmed" tt="uppercase" fw={500}>Input</Text>
-                        <Text size="sm" style={{ whiteSpace: 'pre-wrap', background: vars.bgElevated(), padding: 8, borderRadius: 4 }}>{step.input}</Text>
+                        <Text size="sm" className="workflowDetail_blockText">{step.input}</Text>
                       </>
                     )}
                     <Text size="xs" c="dimmed" tt="uppercase" fw={500} mt="xs">Output</Text>
-                    <Text size="sm" style={{ whiteSpace: 'pre-wrap', background: vars.bgElevated(), padding: 8, borderRadius: 4 }}>{step.output}</Text>
+                    <Text size="sm" className="workflowDetail_blockText">{step.output}</Text>
                   </>
                 ) : (
                   <Alert color="red" variant="light">{step.error}</Alert>

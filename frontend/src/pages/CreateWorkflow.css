@@ -1,0 +1,469 @@
+/* ============================================
+   CREATE WORKFLOW PAGE
+   ============================================ */
+.createWorkflow_root {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 100px);
+  gap: 0;
+}
+
+.createWorkflow_layout {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  gap: 0;
+}
+
+/* ============================================
+   SIDEBAR - Left Panel
+   ============================================ */
+.createWorkflow_sidebar {
+  width: 380px;
+  flex-shrink: 0;
+  background: var(--app-sidebar-gradient);
+  border-right: 1px solid var(--app-border);
+  padding: 24px;
+  overflow-y: auto;
+  box-shadow: var(--app-sidebar-shadow);
+}
+
+[data-mantine-color-scheme="dark"] .createWorkflow_sidebar {
+  background: var(--app-sidebar-gradient-dark);
+  box-shadow: var(--app-sidebar-shadow-dark);
+}
+
+/* Workflow Name Section */
+.createWorkflow_sidebar .mantine-TextInput-root {
+  margin-bottom: 20px;
+}
+
+.createWorkflow_sidebar .mantine-TextInput-label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--app-text-primary);
+  margin-bottom: 8px;
+}
+
+/* Description Textarea */
+.createWorkflow_sidebar .mantine-Textarea-root {
+  margin-bottom: 24px;
+}
+
+.createWorkflow_sidebar .mantine-Textarea-label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--app-text-primary);
+  margin-bottom: 8px;
+}
+
+/* Steps Section Title */
+.createWorkflow_sidebar h3,
+.createWorkflow_sidebar .mantine-Title-root {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--app-text-muted);
+  margin-bottom: 16px;
+  margin-top: 8px;
+}
+
+/* ============================================
+   STEP CARDS - Draggable Items
+   ============================================ */
+.createWorkflow_stepPaper {
+  cursor: grab;
+  opacity: 1;
+  background: var(--app-bg-card) !important;
+  border: 2px solid var(--app-border) !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
+  margin-bottom: 12px !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.createWorkflow_stepPaper::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--app-step-accent);
+  opacity: 0;
+}
+
+.createWorkflow_stepPaper:hover {
+  border-color: var(--app-primary) !important;
+  box-shadow: var(--app-step-hover-shadow) !important;
+}
+
+.createWorkflow_stepPaper:hover::before {
+  opacity: 1;
+}
+
+.createWorkflow_stepPaper:active {
+  cursor: grabbing;
+  transform: scale(0.98);
+}
+
+.createWorkflow_stepPaper--disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.createWorkflow_stepPaper h4,
+.createWorkflow_stepPaper .mantine-Text-root[fw="500"] {
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  color: var(--app-text-primary) !important;
+  margin-bottom: 4px !important;
+}
+
+.createWorkflow_stepPaper p,
+.createWorkflow_stepPaper .mantine-Text-root[size="sm"] {
+  font-size: 0.85rem !important;
+  color: var(--app-text-secondary) !important;
+  line-height: 1.5 !important;
+}
+
+/* ============================================
+   REACT FLOW CANVAS - Main Workspace
+   ============================================ */
+.createWorkflow_canvas {
+  flex: 1;
+  min-width: 0;
+  min-height: 480px;
+  height: 100%;
+  background-color: var(--app-bg-canvas);
+  position: relative;
+}
+
+.createWorkflow_reactFlow {
+  width: 100%;
+  height: 100%;
+  min-height: 480px;
+  background-color: var(--app-bg-canvas) !important;
+  background-image: var(--app-canvas-grid);
+  background-size: 20px 20px;
+  background-position: 0 0;
+}
+
+[data-mantine-color-scheme="dark"] .createWorkflow_reactFlow {
+  background-image: var(--app-canvas-grid-dark);
+}
+
+/* ============================================
+   REACT FLOW NODES - Beautiful Cards
+   ============================================ */
+.react-flow__node {
+  background: var(--app-bg-card) !important;
+  border: 2px solid var(--app-border) !important;
+  border-radius: 16px !important;
+  padding: 0 !important;
+  box-shadow: var(--app-node-shadow) !important;
+  font-family: 'Inter', sans-serif !important;
+  overflow: hidden;
+  z-index: 20
+}
+
+.react-flow__node.connecting,
+.react-flow__node.source {
+  z-index: 150 !important;
+}
+
+.react-flow__node:hover {
+  box-shadow: var(--app-node-hover-shadow) !important;
+  transform: translateY(-2px);
+  border-color: var(--app-primary) !important;
+}
+
+.react-flow__node.selected {
+  border-color: var(--app-primary) !important;
+  box-shadow: var(--app-node-selected-shadow) !important;
+}
+
+[data-mantine-color-scheme="dark"] .react-flow__node {
+  background: var(--app-node-bg-dark) !important;
+  border-color: var(--app-node-border-dark) !important;
+  box-shadow: var(--app-node-shadow-dark) !important;
+}
+
+[data-mantine-color-scheme="dark"] .react-flow__node:hover {
+  box-shadow: var(--app-node-hover-shadow-dark) !important;
+}
+
+/* Input Node */
+.react-flow__node-input {
+  background: var(--app-node-input-bg) !important;
+  border-color: var(--app-node-trigger-border) !important;
+}
+
+[data-mantine-color-scheme="dark"] .react-flow__node-input {
+  background: var(--app-node-input-bg-dark) !important;
+  border-color: var(--app-node-trigger-border) !important;
+}
+
+.react-flow__node-input .react-flow__handle {
+  background: var(--app-node-trigger-border) !important;
+}
+
+/* Default Node */
+.react-flow__node-default {
+  background: var(--app-node-default-bg-gradient) !important;
+  border-color: var(--app-primary) !important;
+}
+
+[data-mantine-color-scheme="dark"] .react-flow__node-default {
+  background: var(--app-node-default-bg-gradient-dark) !important;
+  border-color: var(--app-primary) !important;
+}
+
+.react-flow__node-default .react-flow__handle {
+  background: var(--app-primary) !important;
+}
+
+/* Output Node */
+.react-flow__node-output {
+  background: var(--app-node-output-bg) !important;
+  border-color: var(--app-node-success-border) !important;
+}
+
+[data-mantine-color-scheme="dark"] .react-flow__node-output {
+  background: var(--app-node-output-bg-dark) !important;
+  border-color: var(--app-node-success-border) !important;
+}
+
+.react-flow__node-output .react-flow__handle {
+  background: var(--app-node-success-border) !important;
+}
+
+/* Node Content Styling */
+.react-flow__node-input > div,
+.react-flow__node-default > div,
+.react-flow__node-output > div,
+.react-flow__node-group > div {
+  padding: 16px 20px !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+  color: var(--app-text-primary) !important;
+  line-height: 1.5 !important;
+}
+
+[data-mantine-color-scheme="light"] .react-flow__node-input > div {
+  color: var(--app-node-input-text) !important;
+}
+
+[data-mantine-color-scheme="light"] .react-flow__node-default > div {
+  color: var(--app-node-default-text) !important;
+}
+
+[data-mantine-color-scheme="light"] .react-flow__node-output > div {
+  color: var(--app-node-output-text) !important;
+}
+
+/* ============================================
+   REACT FLOW HANDLES - Connection Points
+   ============================================ */
+.react-flow__handle {
+  width: 12px !important;
+  height: 12px !important;
+  border: 3px solid var(--app-handle-border) !important;
+  background: var(--app-primary) !important;
+  box-shadow: var(--app-handle-shadow) !important;
+}
+
+.react-flow__handle:hover {
+  width: 16px !important;
+  height: 16px !important;
+  box-shadow: var(--app-handle-hover-shadow) !important;
+}
+
+.react-flow__handle-connecting {
+  background: var(--app-accent) !important;
+}
+
+.react-flow__handle-valid {
+  background: var(--app-success) !important;
+}
+
+/* Add these to handle nodes during connection dragging */
+.react-flow__node.connecting {
+  opacity: 1 !important;
+}
+
+.react-flow__node.valid-target {
+  border-color: var(--app-success) !important;
+  box-shadow: 0 0 0 2px var(--app-success) !important;
+}
+
+.react-flow__node.invalid-target {
+  opacity: 0.5 !important;
+}
+
+/* Ensure nodes remain visible during any interaction */
+.react-flow__node {
+  opacity: 1 !important;
+  visibility: visible !important;
+  z-index: 500 !important;
+}
+
+/* During connection mode, keep source node visible */
+.react-flow__node.source {
+  opacity: 1 !important;
+}
+
+/* During connection mode, dim but show target nodes */
+.react-flow__node.target {
+  opacity: 1 !important;
+  z-index: 100 !important;
+}
+
+.react-flow__node,
+.react-flow__node.invalid-target,
+.react-flow__node.connecting,
+.react-flow__node.source,
+.react-flow__node.target {
+  opacity: 1 !important;
+  visibility: visible !important;
+  z-index: 10;
+  background: var(--app-bg-card) !important; /* Ensure background stays solid */
+}
+
+/* ============================================
+   REACT FLOW EDGES - Connection Lines
+   ============================================ */
+.react-flow__edge-path {
+  stroke: var(--app-edge-default) !important;
+  stroke-width: 2.5px !important;
+}
+
+.react-flow__edge:hover .react-flow__edge-path {
+  stroke: var(--app-primary) !important;
+  stroke-width: 3px !important;
+}
+
+.react-flow__edge.selected .react-flow__edge-path,
+.react-flow__edge.animated .react-flow__edge-path {
+  stroke: var(--app-primary) !important;
+  stroke-width: 3px !important;
+}
+
+.react-flow__edge-text {
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  fill: var(--app-text-primary) !important;
+}
+
+.react-flow__edge-textbg {
+  fill: var(--app-bg-card) !important;
+}
+
+/* ============================================
+   REACT FLOW CONTROLS - Zoom/Fit buttons
+   ============================================ */
+.react-flow__controls {
+  background: var(--app-bg-card) !important;
+  border: 1px solid var(--app-border) !important;
+  border-radius: 12px !important;
+  box-shadow: var(--app-shadow-md) !important;
+  overflow: hidden;
+}
+
+.react-flow__controls-button {
+  background: var(--app-bg-card) !important;
+  border: none !important;
+  border-bottom: 1px solid var(--app-border) !important;
+  color: var(--app-text-primary) !important;
+}
+
+.react-flow__controls-button:last-child {
+  border-bottom: none !important;
+}
+
+.react-flow__controls-button:hover {
+  background: var(--app-primary-light) !important;
+  color: var(--app-primary) !important;
+}
+
+.react-flow__controls-button svg {
+  fill: currentColor !important;
+}
+
+.react-flow__viewport {
+  z-index: 0;
+}
+
+/* ============================================
+   REACT FLOW MINIMAP
+   ============================================ */
+.react-flow__minimap {
+  background: var(--app-bg-card) !important;
+  border: 1px solid var(--app-border) !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+  box-shadow: var(--app-shadow-md) !important;
+}
+
+.react-flow__minimap-mask {
+  fill: var(--app-minimap-mask) !important;
+  stroke: var(--app-primary) !important;
+  stroke-width: 2 !important;
+}
+
+.react-flow__minimap-node {
+  fill: var(--app-border) !important;
+  stroke: none !important;
+}
+
+/* ============================================
+   HELPER TEXT & INSTRUCTIONS
+   ============================================ */
+.createWorkflow_canvas::before {
+  content: 'Drag steps from the left sidebar and connect them';
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--app-bg-card);
+  border: 1px solid var(--app-border);
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--app-text-secondary);
+  box-shadow: var(--app-shadow-sm);
+  z-index: 0;
+  pointer-events: none;
+}
+
+[data-mantine-color-scheme="dark"] .createWorkflow_canvas::before {
+  box-shadow: var(--app-shadow-md);
+}
+
+/* Hide instruction when nodes exist */
+.createWorkflow_reactFlow:has(.react-flow__node) ~ .createWorkflow_canvas::before {
+  display: none;
+}
+
+@media (max-width: 1440px) {
+  .createWorkflow_sidebar {
+    width: 300px; /* Reduce from 380px for smaller laptops */
+    padding: 16px;
+  }
+}
+
+/* Adjusting the canvas instruction for smaller screens */
+@media (max-width: 1200px) {
+  .createWorkflow_canvas::before {
+    font-size: 0.75rem;
+    padding: 8px 12px;
+  }
+  
+  .createWorkflow_stepPaper {
+    padding: 12px !important;
+  }
+}
