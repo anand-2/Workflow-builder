@@ -1,5 +1,0 @@
-# Install when using LLM_PROVIDER=local_gemma (local Gemma-2 from Hugging Face)
-# pip install -r requirements.txt -r requirements-local.txt
-torch>=2.0.0
-transformers>=4.36.0
-accelerate>=0.25.0
