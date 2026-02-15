@@ -366,7 +366,7 @@ pip install -r requirements.txt --force-reinstall
 
 ## 📧 Contact
 
-Anand Balaji - [@yourtwitter](https://twitter.com/yourtwitter) - your.email@example.com
+Anand Balaji - anand.blr2000@gmail.com
 
 Project Link: [https://github.com/anand-2/Workflow-builder]
 
