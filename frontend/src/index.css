@@ -1,0 +1,31 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* React Flow canvas */
+.react-flow__attribution {
+  font-size: 10px;
+}
+
+/* Stream cursor blink */
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* Flow animation for active edge */
+@keyframes flowDash {
+  to { stroke-dashoffset: -24; }
+}
+
+/* Pulse for pending step */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}

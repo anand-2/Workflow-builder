@@ -28,7 +28,7 @@ const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 from google import genai  # Latest 2025 SDK!
 client = genai.Client(api_key=api_key)
 response = client.models.generate_content(
-    model='gemini-2.5-flash',  # Latest model
+    model='gemma-3-1b',
     contents=prompt
 )
 ```

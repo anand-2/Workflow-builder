@@ -32,6 +32,8 @@ cp .env.example .env
 
 3. **Edit `.env` and add your credentials:**
 ```env
+# Use gemini_api (default) or local_gemma
+LLM_PROVIDER=gemini_api
 GEMINI_API_KEY=your_gemini_api_key_here
 DATABASE_URL=postgresql://localhost:5432/workflows
 PORT=5000
@@ -89,7 +91,7 @@ client = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
 
 # Generate content with latest API
 response = client.models.generate_content(
-    model='gemini-2.5-flash',
+    model='gemma-3-1b',
     contents=prompt
 )
 ```
@@ -163,14 +165,14 @@ backend-python/
 from google import genai
 client = genai.Client(api_key=key)
 response = client.models.generate_content(
-    model='gemini-2.5-flash',
+    model='gemma-3-1b',
     contents=prompt
 )
 
 # vs Node.js (old SDK)
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 const genAI = new GoogleGenerativeAI(apiKey);
-const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+const model = genAI.getGenerativeModel({ model: 'gemma-3-1b' });
 const result = await model.generateContent(prompt);
 ```
 
@@ -210,6 +212,33 @@ curl -X POST http://localhost:5000/api/workflows/1/run \
 - Verify GEMINI_API_KEY is set correctly
 - Check you haven't hit rate limits (15/min free tier)
 - Try regenerating your API key
+
+## 🏠 Local LLM (Gemma-2 from Hugging Face)
+
+You can run the backend with a **local Gemma-2** model instead of the Gemini API (no API key, runs on your machine).
+
+1. **Install local LLM dependencies:**
+```bash
+pip install -r requirements.txt -r requirements-local.txt
+```
+
+2. **Accept the model license** (required for Gemma): go to [google/gemma-2-2b](https://huggingface.co/google/gemma-2-2b), sign in, and accept the terms.
+
+3. **Download the model (one-time):**
+```bash
+cd backend
+# Optional: set HF_TOKEN=your_huggingface_token if the model is gated
+python download_model.py
+```
+
+4. **Switch to local in `.env`:**
+```env
+LLM_PROVIDER=local_gemma
+# Optional: LOCAL_MODEL_ID=google/gemma-2-2b
+# Optional for gated models: HF_TOKEN=your_huggingface_token
+```
+
+5. **Restart the server.** The first request will load the model into memory (may take a minute).
 
 ### Import errors
 - Make sure you're using Python 3.11+

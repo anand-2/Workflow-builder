@@ -1,0 +1,137 @@
+/* Light mode – default */
+:root,
+[data-mantine-color-scheme="light"] {
+  /* Primary */
+  --app-primary: #2563EB;
+  --app-primary-hover: #1D4ED8;
+  --app-primary-light: #DBEAFE;
+  --app-accent: #7C3AED;
+
+  /* Backgrounds & surfaces */
+  --app-bg-page: #F8FAFC;
+  --app-bg-canvas: #FFFFFF;
+  --app-bg-card: #FFFFFF;
+  --app-bg-sidebar: #F1F5F9;
+  --app-bg-elevated: #FFFFFF;
+
+  /* Node colors (React Flow) */
+  --app-node-default-bg: #FFFFFF;
+  --app-node-default-border: #E2E8F0;
+  --app-node-active-bg: #EFF6FF;
+  --app-node-active-border: #2563EB;
+  --app-node-success-bg: #ECFDF5;
+  --app-node-success-border: #10B981;
+  --app-node-error-bg: #FEF2F2;
+  --app-node-error-border: #EF4444;
+  --app-node-ai-bg: #F5F3FF;
+  --app-node-ai-border: #7C3AED;
+  --app-node-trigger-bg: #FEF3C7;
+  --app-node-trigger-border: #F59E0B;
+
+  /* Edges */
+  --app-edge-default: #94A3B8;
+  --app-edge-active: #2563EB;
+  --app-edge-hover: #64748B;
+
+  /* Text */
+  --app-text-primary: #0F172A;
+  --app-text-secondary: #64748B;
+  --app-text-muted: #94A3B8;
+  --app-text-link: #2563EB;
+
+  /* Semantic */
+  --app-success: #10B981;
+  --app-success-light: #D1FAE5;
+  --app-warning: #F59E0B;
+  --app-warning-light: #FEF3C7;
+  --app-error: #EF4444;
+  --app-error-light: #FEE2E2;
+  --app-info: #0EA5E9;
+  --app-info-light: #E0F2FE;
+
+  /* UI */
+  --app-border: #E2E8F0;
+  --app-border-hover: #CBD5E1;
+  --app-divider: #E2E8F0;
+  --app-input-border: #D1D5DB;
+  --app-input-focus: #2563EB;
+  --app-disabled: #E5E7EB;
+}
+
+/* Apply theme backgrounds to Mantine Card & Paper */
+[data-mantine-color-scheme="light"] .mantine-Card-root,
+[data-mantine-color-scheme="dark"] .mantine-Card-root {
+  background-color: var(--app-bg-card);
+}
+[data-mantine-color-scheme="light"] .mantine-Paper-root,
+[data-mantine-color-scheme="dark"] .mantine-Paper-root {
+  background-color: var(--app-bg-card);
+  border-color: var(--app-border);
+}
+
+/* Dark mode */
+[data-mantine-color-scheme="dark"] {
+  /* Primary */
+  --app-primary: #3B82F6;
+  --app-primary-hover: #60A5FA;
+  --app-primary-light: #1E3A8A;
+  --app-accent: #A78BFA;
+
+  /* Backgrounds & surfaces */
+  --app-bg-page: #0F172A;
+  --app-bg-canvas: #1E293B;
+  --app-bg-card: #1E293B;
+  --app-bg-sidebar: #0F172A;
+  --app-bg-elevated: #334155;
+
+  /* Node colors */
+  --app-node-default-bg: #1E293B;
+  --app-node-default-border: #475569;
+  --app-node-active-bg: #1E3A8A;
+  --app-node-active-border: #3B82F6;
+  --app-node-success-bg: #064E3B;
+  --app-node-success-border: #10B981;
+  --app-node-error-bg: #7F1D1D;
+  --app-node-error-border: #EF4444;
+  --app-node-ai-bg: #3B1E7D;
+  --app-node-ai-border: #A78BFA;
+  --app-node-trigger-bg: #78350F;
+  --app-node-trigger-border: #F59E0B;
+
+  /* Edges */
+  --app-edge-default: #64748B;
+  --app-edge-active: #3B82F6;
+  --app-edge-hover: #94A3B8;
+
+  /* Text */
+  --app-text-primary: #F1F5F9;
+  --app-text-secondary: #CBD5E1;
+  --app-text-muted: #64748B;
+  --app-text-link: #60A5FA;
+
+  /* Semantic */
+  --app-success: #10B981;
+  --app-success-light: #064E3B;
+  --app-warning: #F59E0B;
+  --app-warning-light: #78350F;
+  --app-error: #EF4444;
+  --app-error-light: #7F1D1D;
+  --app-info: #0EA5E9;
+  --app-info-light: #0C4A6E;
+
+  /* UI */
+  --app-border: #334155;
+  --app-border-hover: #475569;
+  --app-divider: #334155;
+  --app-input-border: #475569;
+  --app-input-focus: #3B82F6;
+  --app-disabled: #1E293B;
+}
+
+/* React Flow canvas uses app canvas background */
+.react-flow__container {
+  background-color: var(--app-bg-canvas);
+}
+.react-flow__renderer {
+  background-color: var(--app-bg-canvas);
+}
